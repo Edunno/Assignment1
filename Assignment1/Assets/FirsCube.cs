@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,38 +16,35 @@ public class FirsCube : MonoBehaviour
     void Update()
     //Prøvede at få retningerne til at følge kameraets retning, men det lykkedes ikke :(
     {
+        int velocity = 10;
         if(Input.GetKey(KeyCode.A)){
-            float camF = RunCam();
-            this.GetComponent<Rigidbody>().AddForce(-20-(40*camF),0,camF*20);
+            Vector3 camF =  RunCam();
+            this.GetComponent<Rigidbody>().AddForce(camF*velocity*-1);
         }
         if(Input.GetKey(KeyCode.D)){
-            float camF = RunCam();
-            this.GetComponent<Rigidbody>().AddForce(20+(40*camF),0,camF*20);
+            Vector3 camF =  RunCam();
+            this.GetComponent<Rigidbody>().AddForce(camF*velocity);
         }
         if(Input.GetKey(KeyCode.W)){
-            float camF = RunCam();
-            this.GetComponent<Rigidbody>().AddForce(camF*20,0,20*camF);
+            Vector3 camF = RunCamHoriz();
+            this.GetComponent<Rigidbody>().AddForce(camF*velocity);
         }
         if(Input.GetKey(KeyCode.S)){
-            float camF = RunCam();
-            this.GetComponent<Rigidbody>().AddForce(camF*-20,0,-20*camF);
-        }
+            Vector3 camF = RunCamHoriz();
+            this.GetComponent<Rigidbody>().AddForce(camF*velocity*-1);
+        } 
     }
-    float RunCam()
+
+    Vector3 RunCamHoriz()
     {
-        float camB;
-        float camY = pCam.transform.rotation.y;
-        if(camY>360||camY<-360){
-            camY = (camY%360);
-        }
-        print("first:"+camY);
-        if(camY>0){
-            camB = 1-camY;
-        }
-        else{
-            camB = camY;
-        }
-        print(camB);
-        return camB;
+        Vector3 camY = Camera.main.transform.forward;
+        return camY;
+    }
+
+    Vector3 RunCam()
+    {
+        Vector3 camY = Camera.main.transform.right;
+        print(camY);
+        return camY;
     }
 }
